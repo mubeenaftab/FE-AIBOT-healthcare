@@ -106,8 +106,7 @@ const DoctorAppointmentsPage = () => {
         setSelectedAppointment(null);
     };
 
-    if (loading) return <p>Loading...</p>;
-    if (error) return <p>Error loading appointments</p>;
+
 
     return (
         <div className="doctor-page-container">
