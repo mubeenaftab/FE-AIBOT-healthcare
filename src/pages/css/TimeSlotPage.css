@@ -1,0 +1,77 @@
+:root {
+    --background-color: #125f4f;
+    --content-background: #0a4237;
+    --header-title-color: #fff;
+    --button-background: #fbc02d;
+    --button-text-color: #000;
+    --error-color: #ff4d4d;
+    --success-color: #4CAF50;
+}
+
+.create-timeslot-container {
+    display: flex;
+    height: 100vh;
+    background-color: var(--background-color);
+}
+
+.timeslot-content {
+    flex-grow: 1;
+    background-color: var(--content-background);
+    border-radius: 6px;
+    margin: 26px 15px;
+    padding: 27px 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    overflow-y: auto;
+    max-height: calc(100vh - 40px);
+}
+
+.timeslot-title {
+    color: var(--header-title-color);
+    font-size: 38px;
+    margin: 0;
+    font-weight: bold;
+}
+
+.timeslot-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.timeslot-form label {
+    color: var(--header-title-color);
+    font-weight: bold;
+}
+
+.timeslot-form input {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #fff;
+    color: #000;
+}
+
+.create-timeslot-button {
+    background-color: var(--button-background);
+    color: var(--button-text-color);
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.create-timeslot-button:hover {
+    background-color: #f9d34c;
+    /* A lighter shade for hover effect */
+}
+
+.error-message {
+    color: var(--error-color);
+}
+
+.success-message {
+    color: var(--success-color);
+}

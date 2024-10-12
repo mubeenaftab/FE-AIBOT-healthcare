@@ -1,0 +1,114 @@
+@import url('https://fonts.googleapis.com/css2?family=Syncopate:wght@700&display=swap');
+
+:root {
+    --color-sidebar-background: #125f4f;
+    --color-profile-text: #bdf0ed;
+    --color-nav-link: #FFFFFF;
+    --color-nav-link-hover: #1a8973;
+    --color-nav-link-active: #247c6b;
+    --color-nav-link-active-text: #bdf0ed;
+    --color-nav-link-icon-hover: #bdf0ed;
+    --color-nav-link-icon-active: #bdf0ed;
+    --color-brand-text: #bdf0ed;
+    --color-border-active: #247c6b;
+    --font-size-profile: 15px;
+    --font-size-brand: 20px;
+    --icon-size: 20px;
+    --border-radius: 6px;
+    --padding-nav-link: 8px 12px;
+    --margin-bottom-profile: 30px;
+    --margin-bottom-nav-item: 1px;
+    --width-sidebar: 225px;
+    --width-nav-link: 99%;
+}
+
+
+.sidebar {
+    width: var(--width-sidebar);
+    background-color: var(--color-sidebar-background);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 20px;
+}
+
+.profile {
+    text-align: center;
+    margin-bottom: var(--margin-bottom-profile);
+}
+
+.profile img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+}
+
+.profile h2 {
+    margin-top: 10px;
+    color: var(--color-profile-text);
+    font-size: var(--font-size-profile);
+}
+
+.sidebar-nav {
+    flex-grow: 1;
+}
+
+.sidebar-nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar-nav ul li {
+    margin-bottom: var(--margin-bottom-nav-item);
+}
+
+.nav-link {
+    color: var(--color-nav-link);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    padding: var(--padding-nav-link);
+    border-radius: var(--border-radius);
+    transition: background-color 0.3s, border 0.3s, color 0.3s;
+    border: none;
+    width: var(--width-nav-link);
+    margin: 0 auto;
+}
+
+.nav-link .icon {
+    color: var(--color-nav-link);
+    margin-right: 10px;
+    font-size: var(--icon-size);
+    transition: color 0.3s;
+}
+
+.nav-link:hover {
+    color: var(--color-nav-link-icon-hover);
+    background-color: var(--color-nav-link-hover);
+}
+
+.nav-link:hover .icon {
+    color: var(--color-nav-link-icon-hover);
+}
+
+.nav-link.active {
+    color: var(--color-nav-link-active-text);
+    border: 1px solid var(--color-border-active);
+    border-radius: var(--border-radius);
+    background-color: var(--color-nav-link-active);
+}
+
+.nav-link.active .icon {
+    color: var(--color-nav-link-active-text);
+}
+
+.brand {
+    margin-top: auto;
+    text-align: center;
+    color: var(--color-brand-text);
+}
+
+.brand h3 {
+    font-family: 'Syncopate', sans-serif;
+    font-size: var(--font-size-brand);
+}

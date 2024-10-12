@@ -1,0 +1,216 @@
+:root {
+    --background-color: #125f4f;
+    --content-background: #0a4237;
+    --header-title-color: #fff;
+    --button-background: #fbc02d;
+    --button-text-color: #000;
+    --button-hover-transform: scale(1.05);
+    --extra-button-background: #272625;
+    --icon-color: #00e5ff;
+    --table-header-color: #888;
+    --table-border-top: #444;
+    --table-cell-background: #1e1e1e;
+    --checkbox-border-color: #474444;
+    --checkbox-background-color: #474444;
+    --checkbox-tick-color: #00FFFF;
+    --table-row-hover-background: #292929;
+    --table-row-even-background: #0f4a40;
+    --table-row-odd-background: #15352f;
+    --date-text-color: gray;
+    --background-dark-select: #15352f;
+}
+
+.doctor-page-container {
+    display: flex;
+    height: 100vh;
+    background-color: var(--background-color);
+}
+
+.appointments-content {
+    flex-grow: 1;
+    background-color: var(--content-background);
+    border-radius: 6px;
+    margin: 26px 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    overflow-y: auto;
+    max-height: calc(100vh - 40px);
+    padding: 27px 30px;
+}
+
+.appointments-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.appointments-title {
+    color: var(--header-title-color);
+    font-size: 38px;
+    margin: 0;
+    font-weight: bold;
+}
+
+.appointments-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 3px;
+    color: var(--header-title-color);
+}
+
+.appointments-table th {
+    padding: 8px;
+    padding-left: 11px;
+    text-align: left;
+    color: var(--table-header-color);
+    font-weight: normal;
+    border-top: 1px solid var(--table-border-top);
+    font-size: 14px;
+}
+
+.appointments-table td {
+    padding: 13px 11px;
+    font-size: 12px;
+    background-color: var(--table-cell-background);
+}
+
+.appointments-table tr {
+    border-radius: 7px;
+}
+
+.appointments-table tr td:first-child {
+    border-top-left-radius: 7px;
+    border-bottom-left-radius: 7px;
+}
+
+.appointments-table tr td:last-child {
+    border-top-right-radius: 7px;
+    border-bottom-right-radius: 7px;
+}
+
+.appointments-table tr:hover td {
+    background-color: var(--table-row-hover-background);
+}
+
+.appointments-table tr:nth-child(even) td {
+    background-color: var(--table-row-even-background);
+}
+
+.appointments-table tr:nth-child(odd) td {
+    background-color: var(--table-row-odd-background);
+}
+
+.pagination-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin: 10px 0;
+}
+
+.pagination-controls button {
+    background-color: var(--button-background);
+    color: var(--button-text-color);
+    border: none;
+    padding: 0px 10px;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.pagination-controls button:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+}
+
+.pagination-controls button:hover:not(:disabled) {
+    transform: scale(1.05);
+}
+
+.pagination-controls span {
+    font-size: 16px;
+    color: var(--header-title-color);
+}
+
+.pagination-controls select {
+    background-color: var(--background-dark-select);
+    color: var(--header-title-color);
+    font-weight: 500;
+    border: none;
+    padding: 8px;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    width: 110px;
+    text-align: left;
+    margin-left: auto;
+}
+
+.pagination-controls select option {
+    background-color: var(--content-background);
+    color: var(--header-title-color);
+}
+
+.no-appointments-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 300px;
+    /* Adjust based on your layout */
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.no-appointments-message {
+    font-size: 1.5rem;
+    color: #666;
+    font-weight: bold;
+}
+
+.mark-done-button {
+    background-color: #4CAF50;
+    /* Green */
+    color: white;
+    border: none;
+    padding: 4px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.mark-done-button:hover {
+    background-color: #45a049;
+    /* Darker green */
+}
+
+.done-button {
+    background-color: #cccccc;
+    /* Light gray */
+    color: #666666;
+    /* Dark gray */
+    border: none;
+    padding: 4px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    margin: 4px 2px;
+    cursor: not-allowed;
+    /* Indicate that it is not clickable */
+    border-radius: 5px;
+    opacity: 0.7;
+    /* Slightly transparent */
+    pointer-events: none;
+    /* Prevent any interaction */
+}
+
+.done-button:hover {
+    background-color: #b3b3b3;
+    /* Darker gray */
+    /* No change to color or other properties since it should be non-clickable */
+}
