@@ -26,7 +26,7 @@ export const AuthProvider = ({ children }) => {
 
     const login = async (username, password, role) => {
         try {
-            const response = await axios.post('http://127.0.0.1:8000/login', {
+            const response = await axios.post('https://aibot-healthcare.onrender.com/login', {
                 username,
                 password,
                 role,
@@ -44,7 +44,7 @@ export const AuthProvider = ({ children }) => {
             }
             throw error;
         }
-    };    
+    };
 
     const logout = () => {
         localStorage.removeItem('token');
