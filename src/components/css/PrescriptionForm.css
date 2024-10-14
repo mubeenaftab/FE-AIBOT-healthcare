@@ -57,28 +57,53 @@
     min-height: 80px;
 }
 
-.prescription-form-container button[type="submit"] {
-    padding: 8px 16px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 14px;
-    background-color: #fbc02d;
-    color: #000;
-    transition: transform 0.3s ease, background-color 0.3s ease;
-}
-
-.prescription-form-container button[type="submit"]:hover {
-    transform: scale(1.05);
-}
-
 .prescription-form-container .error-message {
     color: #ff6b6b;
     font-size: 13px;
     margin-bottom: 8px;
 }
 
+/* Styling for the buttons container */
+.prescription-form-container .button-group {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.prescription-form-container .button-group button {
+    flex: 1; /* Makes both buttons equally wide */
+    padding: 8px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+/* Submit button styling */
+.prescription-form-container button[type="submit"] {
+    background-color: #fbc02d;
+    color: #000;
+}
+
+.prescription-form-container button[type="submit"]:hover {
+    transform: scale(1.05);
+}
+
+/* Close (Return) button styling */
 .prescription-form-container .close-button {
+    background-color: #f44336;
+    color: #fff;
+}
+
+.prescription-form-container .close-button:hover {
+    background-color: #e57373;
+    transform: scale(1.05);
+}
+
+/* X (close) button at the top right */
+.prescription-form-container .close-button-top-right {
     position: absolute;
     top: 10px;
     right: 10px;
@@ -91,6 +116,6 @@
     line-height: 1;
 }
 
-.prescription-form-container .close-button:hover {
+.prescription-form-container .close-button-top-right:hover {
     color: #00e5ff;
 }

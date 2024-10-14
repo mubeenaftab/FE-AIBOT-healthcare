@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { createPrescription } from '../api'; // Adjust API import
+import { createPrescription } from '../api';
 import './css/PrescriptionForm.css';
+
 const PrescriptionForm = ({ appointment, onClose }) => {
     const [medicationName, setMedicationName] = useState('');
     const [dosage, setDosage] = useState('');
@@ -24,7 +25,15 @@ const PrescriptionForm = ({ appointment, onClose }) => {
 
         try {
             await createPrescription(prescriptionData);
-            onClose();
+            // Clear the form after successful submission
+            setMedicationName('');
+            setDosage('');
+            setFrequency('');
+            setDuration('');
+            setInstructions('');
+            setError(null); // Clear error if any
+
+            // The form remains open to create more prescriptions
         } catch (err) {
             setError('Failed to create prescription.'); // Handle error
             console.error(err);
@@ -78,11 +87,19 @@ const PrescriptionForm = ({ appointment, onClose }) => {
                         <textarea
                             value={instructions}
                             onChange={(e) => setInstructions(e.target.value)}
-                            required
                         />
                     </div>
-                    <button type="submit">Submit</button>
-                    <button type="button" className="close-button" onClick={onClose}>&times;</button>
+
+                    <div className="button-group">
+                        <button type="submit">Submit</button>
+                        <button
+                            type="button"
+                            className="close-button"
+                            onClick={onClose}
+                        >
+                            Return
+                        </button>
+                    </div>
                 </form>
             </div>
         </div>
