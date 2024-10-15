@@ -39,7 +39,7 @@ function Sidebar() {
         <ul>
           <li>
             <NavLink
-              to="/admin/doctor"
+              to="/admin/doctors"
               className={({ isActive }) => isActive ? "active nav-link" : "nav-link"}
             >
               <FaUserDoctor className="icon" /> Doctors
