@@ -15,35 +15,71 @@ const RegisterPatientPage = () => {
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
 
+
   const validateForm = () => {
-    const errors = {};
     if (!username) errors.username = 'Username is required';
     if (!password) errors.password = 'Password is required';
     if (!firstName) errors.firstName = 'First name is required';
     if (!lastName) errors.lastName = 'Last name is required';
     if (!phoneNumber) errors.phoneNumber = 'Phone number is required';
     if (!dob) errors.dob = 'Date of birth is required';
+
+    const errors = {};
+  
+    // Username validation: required and length between 3 and 80 characters
+    if (!username.trim()) {
+      errors.username = 'Username is required';
+    } else if (username.length < 3 || username.length > 80) {
+      errors.username = 'Username must be greater than 3';
+    }
+  
+    // Password validation: required and can add complexity checks if needed
+    if (!password) {
+      errors.password = 'Password is required';
+    } else if (password.length < 8) {
+      errors.password = 'Password must be at least 8 characters long';
+    }
+  
+    if (!firstName.trim() || firstName.length < 2 || firstName.length > 50) {
+      errors.firstName = 'First name must be greater than 2';
+    }
+    if (!lastName.trim() || lastName.length < 2 || lastName.length > 50) {
+      errors.lastName = 'Last name must be greater than 2';
+    }
+  
+    // Phone Number validation: required (can add more validation if format is specific)
+    if (!phoneNumber.trim()) {
+      errors.phoneNumber = 'Phone number is required';
+    } else if (!/^\d{11}$/.test(phoneNumber)) {
+      errors.phoneNumber = 'Phone number must be 11 digits long';
+    }
+  
+    // Date of Birth validation: required
+    if (!dob) {
+      errors.dob = 'Date of birth is required';
+    }
+  
     return errors;
   };
-
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     const validationErrors = validateForm();
-
+  
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
       return;
     }
+  
     const patientData = {
-        username,
-        password,
-        first_name: firstName,
-        last_name: lastName,
-        phone_number: phoneNumber,
-        dob,
+      username,
+      password,
+      first_name: firstName,
+      last_name: lastName,
+      phone_number: phoneNumber,
+      dob,
     };
-
-    console.log("Registering patient with data:", patientData);
+  
     try {
       await registerPatient(patientData);
       Swal.fire({
@@ -62,27 +98,22 @@ const RegisterPatientPage = () => {
           popup: 'swal2-popup',
           timerProgressBar: 'green-progress-bar',
         },
-        didOpen: (toast) => {
-          toast.addEventListener('mouseenter', Swal.stopTimer);
-          toast.addEventListener('mouseleave', Swal.resumeTimer);
-        }
       });
       setTimeout(() => {
         navigate('/login');
       }, 1000);
     } catch (error) {
       console.error('Registration failed:', error);
-      console.error('Error response:', error.response ? error.response.data : error.message);
-
+  
       let errorMessage = 'Registration failed. Please try again.';
-      if (error.response) {
-        if (error.response.data && Array.isArray(error.response.data.detail)) {
+      if (error.response && error.response.data) {
+        if (Array.isArray(error.response.data.detail)) {
           errorMessage = error.response.data.detail.map(err => err.msg).join(', ') || errorMessage;
         } else if (error.response.data.detail) {
           errorMessage = error.response.data.detail;
         }
       }
-
+  
       Swal.fire({
         title: 'Registration Failed',
         text: errorMessage,
@@ -99,14 +130,10 @@ const RegisterPatientPage = () => {
           popup: 'swal2-popup',
           timerProgressBar: 'red-progress-bar',
         },
-        didOpen: (toast) => {
-          toast.addEventListener('mouseenter', Swal.stopTimer);
-          toast.addEventListener('mouseleave', Swal.resumeTimer);
-        }
       });
     }
   };
-
+  
   return (
     <div className="container-fluid d-flex flex-column justify-content-center align-items-center text-light">
       <Helmet>
