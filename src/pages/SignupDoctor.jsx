@@ -12,81 +12,43 @@ const RegisterDoctorPage = () => {
   const [lastName, setLastName] = useState('');
   const [specialization, setSpecialization] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
-  const [errors, setErrors] = useState({});
   const navigate = useNavigate();
 
-  const validatePassword = (password) => {
-    if (password.length < 8) {
-      return 'Password must be at least 8 characters long';
+  const showFirstError = (errors) => {
+    if (errors && errors.length > 0) {
+      const firstError = errors[0];
+      const field = firstError.loc[firstError.loc.length - 1];
+      const message = firstError.msg;
+      
+      const toast = Swal.fire({
+        title: `${field.charAt(0).toUpperCase() + field.slice(1)}`,
+        text: message,
+        icon: 'error',
+        toast: true,
+        timer: 3000,
+        timerProgressBar: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        background: '#1b1b1b',
+        color: '#d8fffb',
+        didOpen: (toast) => {
+          toast.addEventListener('mouseenter', Swal.stopTimer)
+          toast.addEventListener('mouseleave', Swal.resumeTimer)
+        },
+        didClose: () => {
+          // Focus on the input field that has the error
+          const inputElement = document.getElementById(field);
+          if (inputElement) {
+            inputElement.focus();
+          }
+        }
+      });
     }
-    if (!/[A-Z]/.test(password)) {
-      return 'Password must contain at least one uppercase letter';
-    }
-    if (!/[a-z]/.test(password)) {
-      return 'Password must contain at least one lowercase letter';
-    }
-    if (!/\d/.test(password)) {
-      return 'Password must contain at least one digit';
-    }
-    if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
-      return 'Password must contain at least one special character';
-    }
-    return '';
-  };
-
-  const validatePhoneNumber = (phoneNumber) => {
-    if (!phoneNumber.startsWith('03') || phoneNumber.length !== 11 || !/^\d+$/.test(phoneNumber)) {
-      return 'Phone number must be a valid Pakistani number starting with "03" and exactly 11 digits long';
-    }
-    return '';
-  };
-
-  const validateForm = () => {
-    const errors = {};
-
-    if (!username.trim()) {
-      errors.username = 'Username is required';
-    } else if (username.length < 3 || username.length > 80) {
-        errors.username = 'Username must be greater than 3';
-    }
-      if (!firstName.trim() || firstName.length < 2 || firstName.length > 50) {
-      errors.firstName = 'First name must be greater than 2';
-    }
-    if (!lastName.trim() || lastName.length < 2 || lastName.length > 50) {
-      errors.lastName = 'Last name must be greater than 2';
-    }
-    if (!specialization.trim() || specialization.length < 3 || specialization.length > 100) {
-      errors.specialization = 'Specialization must be between 3';
-    }
-
-    const phoneNumberError = validatePhoneNumber(phoneNumber);
-    if (phoneNumberError) errors.phoneNumber = phoneNumberError;
-
-    const passwordError = validatePassword(password);
-    if (passwordError) errors.password = passwordError;
-
-    setErrors(errors);
-    return Object.keys(errors).length === 0;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (!validateForm()) {
-      Swal.fire({
-        title: 'Validation Error',
-        text: 'Please correct the highlighted fields.',
-        icon: 'error',
-        toast: true,
-        timer: 5000,
-        position: 'top-end',
-        background: '#1b1b1b',
-        color: '#d8fffb',
-        showConfirmButton: false,
-      });
-      return;
-    }
-
+  
     const doctorData = {
       username,
       password,
@@ -95,37 +57,104 @@ const RegisterDoctorPage = () => {
       specialization,
       phone_number: phoneNumber,
     };
-
+  
     try {
       await registerDoctor(doctorData);
       Swal.fire({
-        title: 'Doctor Registered!',
-        text: 'Doctor registration was successful.',
+        title: 'Registration Successful',
+        text: 'Doctor has been successfully registered.',
         icon: 'success',
+        toast: true,
         timer: 3000,
-        toast: true,
+        timerProgressBar: true,
         position: 'top-end',
+        showConfirmButton: false,
         background: '#1b1b1b',
         color: '#d8fffb',
-        showConfirmButton: false,
+        didOpen: (toast) => {
+          toast.addEventListener('mouseenter', Swal.stopTimer);
+          toast.addEventListener('mouseleave', Swal.resumeTimer);
+        }
       });
-
-      navigate('/login');
+      setTimeout(() => {
+        navigate('/login');
+      }, 1000);
     } catch (error) {
-      Swal.fire({
-        title: 'Error',
-        text: 'Registration failed. Please try again.',
-        icon: 'error',
-        toast: true,
-        timer: 5000,
-        position: 'top-end',
-        background: '#1b1b1b',
-        color: '#d8fffb',
-        showConfirmButton: false,
-      });
+      if (error.response) {
+        const status = error.response.status;
+        const validationErrors = error.response.data.detail;
+  
+        if (status === 422) {
+          // Check if the error relates to unique constraint violation
+          const uniqueError = validationErrors.find(err => 
+            err.msg.toLowerCase().includes('unique')
+          );
+  
+          if (uniqueError) {
+            const field = uniqueError.loc[uniqueError.loc.length - 1];
+            Swal.fire({
+              title: `${field.charAt(0).toUpperCase() + field.slice(1)}`,
+              text: 'This phone number must be unique.',
+              icon: 'error',
+              toast: true,
+              timer: 3000,
+              timerProgressBar: true,
+              position: 'top-end',
+              showConfirmButton: false,
+              background: '#1b1b1b',
+              color: '#d8fffb',
+              didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer);
+                toast.addEventListener('mouseleave', Swal.resumeTimer);
+              }
+            });
+            // Focus on the input field that has the error
+            const inputElement = document.getElementById(field);
+            if (inputElement) {
+              inputElement.focus();
+            }
+          } else {
+            showFirstError(validationErrors);
+          }
+        } else {
+          Swal.fire({
+            title: 'Registration Failed',
+            text: 'Something went wrong. Please try again.',
+            icon: 'error',
+            toast: true,
+            timer: 3000,
+            timerProgressBar: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            background: '#1b1b1b',
+            color: '#d8fffb',
+            didOpen: (toast) => {
+              toast.addEventListener('mouseenter', Swal.stopTimer);
+              toast.addEventListener('mouseleave', Swal.resumeTimer);
+            }
+          });
+        }
+      } else {
+        Swal.fire({
+          title: 'Registration Failed',
+          text: 'Something went wrong. Please try again.',
+          icon: 'error',
+          toast: true,
+          timer: 3000,
+          timerProgressBar: true,
+          position: 'top-end',
+          showConfirmButton: false,
+          background: '#1b1b1b',
+          color: '#d8fffb',
+          didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer);
+            toast.addEventListener('mouseleave', Swal.resumeTimer);
+          }
+        });
+      }
     }
   };
-
+  
   return (
     <div className="container-fluid d-flex flex-column justify-content-center align-items-center text-light">
       <Helmet>
@@ -137,72 +166,74 @@ const RegisterDoctorPage = () => {
       </h1>
       <form onSubmit={handleSubmit} className="login-form">
         <div className="mb-1 mt-3">
-          <label htmlFor="username" className="form-label label">Username</label>
+          <label htmlFor="username" className="form-label label" style={{ fontSize: '0.875rem' }}>Enter username</label>
           <input
             type="text"
-            className={`form-control ${errors.username ? 'is-invalid' : ''}`}
+            className="form-control bg-dark text-light border-0"
+            id="username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
           />
-          {errors.username && <div className="invalid-feedback">{errors.username}</div>}
         </div>
-
-        <div className="mb-1">
-          <label htmlFor="firstName" className="form-label label">First Name</label>
+        
+        <div className="mb-1 mt-1">
+          <label htmlFor="firstName" className="form-label label" style={{ fontSize: '0.875rem' }}>First Name</label>
           <input
             type="text"
-            className={`form-control ${errors.firstName ? 'is-invalid' : ''}`}
+            className="form-control bg-dark text-light border-0"
+            id="firstName"
             value={firstName}
             onChange={(e) => setFirstName(e.target.value)}
           />
-          {errors.firstName && <div className="invalid-feedback">{errors.firstName}</div>}
         </div>
 
-        <div className="mb-1">
-          <label htmlFor="lastName" className="form-label label">Last Name</label>
+        <div className="mb-1 mt-1">
+          <label htmlFor="lastName" className="form-label label" style={{ fontSize: '0.875rem' }}>Last Name</label>
           <input
             type="text"
-            className={`form-control ${errors.lastName ? 'is-invalid' : ''}`}
+            className="form-control bg-dark text-light border-0"
+            id="lastName"
             value={lastName}
             onChange={(e) => setLastName(e.target.value)}
           />
-          {errors.lastName && <div className="invalid-feedback">{errors.lastName}</div>}
         </div>
 
-        <div className="mb-1">
-          <label htmlFor="specialization" className="form-label label">Specialization</label>
+        <div className="mb-1 mt-1">
+          <label htmlFor="specialization" className="form-label label" style={{ fontSize: '0.875rem' }}>Specialization</label>
           <input
             type="text"
-            className={`form-control ${errors.specialization ? 'is-invalid' : ''}`}
+            className="form-control bg-dark text-light border-0"
+            id="specialization"
             value={specialization}
             onChange={(e) => setSpecialization(e.target.value)}
           />
-          {errors.specialization && <div className="invalid-feedback">{errors.specialization}</div>}
         </div>
 
-        <div className="mb-1">
-          <label htmlFor="phoneNumber" className="form-label label">Phone Number</label>
+        <div className="mb-1 mt-1">
+          <label htmlFor="phoneNumber" className="form-label label" style={{ fontSize: '0.875rem' }}>Phone Number</label>
           <input
             type="text"
-            className={`form-control ${errors.phoneNumber ? 'is-invalid' : ''}`}
+            className="form-control bg-dark text-light border-0"
+            id="phoneNumber"
             value={phoneNumber}
             onChange={(e) => setPhoneNumber(e.target.value)}
           />
-          {errors.phoneNumber && <div className="invalid-feedback">{errors.phoneNumber}</div>}
         </div>
 
-        <div className="mb-1">
-          <label htmlFor="password" className="form-label label">Password</label>
+        <div className="mb-3 mt-1">
+          <label htmlFor="password" className="form-label label" style={{ fontSize: '0.875rem' }}>Enter password</label>
           <input
             type="password"
-            className={`form-control ${errors.password ? 'is-invalid' : ''}`}
+            className="form-control bg-dark text-light border-0 mb-4"
+            id="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          {errors.password && <div className="invalid-feedback">{errors.password}</div>}
         </div>
-
-        <button type="submit" className="btn btn-primary w-100 mt-1">Register Doctor</button>
+        
+        <button type="submit" className="btn btn-primary w-100 mt-1">
+          Register Doctor
+        </button>
       </form>
     </div>
   );
