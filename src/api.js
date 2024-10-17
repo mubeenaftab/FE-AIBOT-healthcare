@@ -15,33 +15,13 @@ api.interceptors.request.use(
 );
 
 export const registerPatient = async (patientData) => {
-  try {
     const response = await api.post(`/register/patient`, patientData);
     return response.data;
-  } catch (error) {
-    if (error.response) {
-      throw new Error(error.response.data.detail || 'An error occurred while registering the patient.');
-    } else if (error.request) {
-      throw new Error('No response from the server. Please try again later.');
-    } else {
-      throw new Error('An unexpected error occurred: ' + error.message);
-    }
-  }
 };
 
 export const registerDoctor = async (doctorData) => {
-  try {
     const response = await api.post(`/register/doctor`, doctorData);
     return response.data;
-  } catch (error) {
-    if (error.response) {
-      throw new Error(error.response.data.detail || 'An error occurred while registering the patient.');
-    } else if (error.request) {
-      throw new Error('No response from the server. Please try again later.');
-    } else {
-      throw new Error('An unexpected error occurred: ' + error.message);
-    }
-  }
 };
 export const registerTimeSlot = async (timeslotData) => {
   try {
@@ -59,18 +39,10 @@ export const registerTimeSlot = async (timeslotData) => {
 };
 
 export const createPrescription = async (prescriptionData) => {
-  try {
+
     const response = await api.post(`/prescriptions`, prescriptionData);
     return response.data;
-  } catch (error) {
-    if (error.response) {
-      throw new Error(error.response.data.detail || 'An error occurred while creating the prescription.');
-    } else if (error.request) {
-      throw new Error('No response from the server. Please try again later.');
-    } else {
-      throw new Error('An unexpected error occurred: ' + error.message);
-    }
-  }
+
 };
 
 
