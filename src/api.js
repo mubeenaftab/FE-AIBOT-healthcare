@@ -1,6 +1,9 @@
 import axios from 'axios';
 const api = axios.create({
-  baseURL: 'https://aibot-healthcare.onrender.com/',
+  // baseURL: 'https://aibot-healthcare.onrender.com/',
+  baseURL: "http://localhost:8000",
+
+
 });
 
 api.interceptors.request.use(
@@ -15,13 +18,25 @@ api.interceptors.request.use(
 );
 
 export const registerPatient = async (patientData) => {
-    const response = await api.post(`/register/patient`, patientData);
-    return response.data;
+  const response = await api.post(`/register/patient`, patientData);
+  return response.data;
 };
 
+export const updatePatient = async (patientId, patientData) => {
+  const response = await api.put(`/update/patient/${patientId}`, patientData);
+  return response.data;
+}
+
+export const updateDoctor = async (doctorId, doctorData) => {
+  const response = await api.put(`/update/doctor/${doctorId}`, doctorData);
+  return response.data;
+};
+
+
+
 export const registerDoctor = async (doctorData) => {
-    const response = await api.post(`/register/doctor`, doctorData);
-    return response.data;
+  const response = await api.post(`/register/doctor`, doctorData);
+  return response.data;
 };
 export const registerTimeSlot = async (timeslotData) => {
   try {
@@ -40,8 +55,8 @@ export const registerTimeSlot = async (timeslotData) => {
 
 export const createPrescription = async (prescriptionData) => {
 
-    const response = await api.post(`/prescriptions`, prescriptionData);
-    return response.data;
+  const response = await api.post(`/prescriptions`, prescriptionData);
+  return response.data;
 
 };
 

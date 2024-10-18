@@ -9,7 +9,8 @@ import AdminAppointmentsPage from './pages/AdminAppointmentPage';
 import ChatPage from './pages/ChatPage';
 import AdminDoctorPage from './pages/AdminDoctorPage';
 import DoctorAppointmentsPage from './pages/DoctorAppointmentPage';
-
+import PatientUpdatePage from './pages/PatientUpdatePage';
+import DoctorUpdatePage from './pages/DoctorUpdatePage';
 import TimeSlotPage from './pages/TimeSlotPage';
 import useIdleTimeout from './hooks/useIdleTimeout';
 
@@ -43,6 +44,8 @@ const AppRoutes = () => {
             <Route path="/admin/appointments" element={<PrivateRoute element={AdminAppointmentsPage} />} />
             <Route path="/doctor/appointments" element={<PrivateRoute element={DoctorAppointmentsPage} />} />
             <Route path="/timeslot-form" element={<PrivateRoute element={TimeSlotPage} />} />
+            <Route path="/patients/update" element={<PrivateRoute element={PatientUpdatePage} />} />
+            <Route path="/doctors/update" element={<PrivateRoute element={DoctorUpdatePage} />} />
         </Routes>
     );
 };
