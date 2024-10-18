@@ -1,8 +1,6 @@
 import axios from 'axios';
 const api = axios.create({
-  // baseURL: 'https://aibot-healthcare.onrender.com/',
-  baseURL: "http://localhost:8000",
-
+  baseURL: 'https://aibot-healthcare.onrender.com/',
 
 });
 
@@ -184,57 +182,4 @@ export const markAppointmentAsInactive = async (appointment_id) => {
 
 
 
-
-// **************************************************************************
-
-
-export const fetchRecentExpenses = async () => {
-  try {
-    const response = await api.get(`/expenses/recent`);
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching recent expenses:', error);
-    throw error;
-  }
-};
-
-
-
-export const fetchCategories = async () => {
-  try {
-    const response = await api.get(`/categories/active`);
-    const data = response.data;
-    if (Array.isArray(data)) {
-      return data;
-    } else {
-      throw new Error('Response data is not an array');
-    }
-  } catch (error) {
-    console.error('Error fetching categories:', error);
-    throw error;
-  }
-};
-
-export const createExpense = async (expenseData, invoiceImage) => {
-  try {
-    const formData = new FormData();
-    formData.append('expense', JSON.stringify(expenseData));
-
-    if (invoiceImage) {
-      formData.append('invoice_image', invoiceImage);
-    }
-
-
-    const response = await api.post('/expenses', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      }
-    });
-
-    return response.data;
-  } catch (error) {
-    console.error('Error creating expense:', error);
-    throw error;
-  }
-};
 
