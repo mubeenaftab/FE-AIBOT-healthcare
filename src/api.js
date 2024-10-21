@@ -1,6 +1,7 @@
 import axios from 'axios';
 const api = axios.create({
   baseURL: 'https://aibot-healthcare.onrender.com/',
+
 });
 
 api.interceptors.request.use(
@@ -15,13 +16,25 @@ api.interceptors.request.use(
 );
 
 export const registerPatient = async (patientData) => {
-    const response = await api.post(`/register/patient`, patientData);
-    return response.data;
+  const response = await api.post(`/register/patient`, patientData);
+  return response.data;
 };
 
+export const updatePatient = async (patientId, patientData) => {
+  const response = await api.put(`/update/patient/${patientId}`, patientData);
+  return response.data;
+}
+
+export const updateDoctor = async (doctorId, doctorData) => {
+  const response = await api.put(`/update/doctor/${doctorId}`, doctorData);
+  return response.data;
+};
+
+
+
 export const registerDoctor = async (doctorData) => {
-    const response = await api.post(`/register/doctor`, doctorData);
-    return response.data;
+  const response = await api.post(`/register/doctor`, doctorData);
+  return response.data;
 };
 export const registerTimeSlot = async (timeslotData) => {
   try {
@@ -40,8 +53,8 @@ export const registerTimeSlot = async (timeslotData) => {
 
 export const createPrescription = async (prescriptionData) => {
 
-    const response = await api.post(`/prescriptions`, prescriptionData);
-    return response.data;
+  const response = await api.post(`/prescriptions`, prescriptionData);
+  return response.data;
 
 };
 
@@ -169,57 +182,4 @@ export const markAppointmentAsInactive = async (appointment_id) => {
 
 
 
-
-// **************************************************************************
-
-
-export const fetchRecentExpenses = async () => {
-  try {
-    const response = await api.get(`/expenses/recent`);
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching recent expenses:', error);
-    throw error;
-  }
-};
-
-
-
-export const fetchCategories = async () => {
-  try {
-    const response = await api.get(`/categories/active`);
-    const data = response.data;
-    if (Array.isArray(data)) {
-      return data;
-    } else {
-      throw new Error('Response data is not an array');
-    }
-  } catch (error) {
-    console.error('Error fetching categories:', error);
-    throw error;
-  }
-};
-
-export const createExpense = async (expenseData, invoiceImage) => {
-  try {
-    const formData = new FormData();
-    formData.append('expense', JSON.stringify(expenseData));
-
-    if (invoiceImage) {
-      formData.append('invoice_image', invoiceImage);
-    }
-
-
-    const response = await api.post('/expenses', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      }
-    });
-
-    return response.data;
-  } catch (error) {
-    console.error('Error creating expense:', error);
-    throw error;
-  }
-};
 

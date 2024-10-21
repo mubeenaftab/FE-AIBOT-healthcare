@@ -1,0 +1,81 @@
+:root {
+    --background-color: #125f4f;
+    --content-background: #0a4237;
+    --header-title-color: #fff;
+    --button-background: #fbc02d;
+    --button-text-color: #000;
+    --error-color: #ff4d4d;
+    --success-color: #4CAF50;
+}
+
+.update-container {
+    display: flex;
+    height: 100vh;
+    background-color: var(--background-color);
+}
+
+.update-content {
+    flex-grow: 1;
+    background-color: var(--content-background);
+    border-radius: 6px;
+    margin: 26px 15px;
+    padding: 27px 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    overflow-y: auto;
+    max-height: calc(100vh - 40px);
+}
+
+.update-title {
+    color: var(--header-title-color);
+    font-size: 38px;
+    margin: 0;
+    font-weight: bold;
+}
+
+
+.update-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    margin-bottom: 5px;
+    color: var(--header-title-color);
+}
+
+input {
+    padding: 6px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+}
+
+.update-button {
+    background-color: var(--button-background);
+    color: var(--button-text-color);
+    padding: 6px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.update-button:hover {
+    background-color: #e5ac14;
+}
+
+.success-message {
+    color: var(--success-color);
+}
+
+.error-message {
+    color: var(--error-color);
+}
