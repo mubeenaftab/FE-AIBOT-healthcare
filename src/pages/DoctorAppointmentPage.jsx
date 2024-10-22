@@ -54,16 +54,14 @@ const DoctorAppointmentsPage = () => {
                     setPatients(patientMap);
 
                     const timeslotPromises = data.items.map(appointment =>
-                        fetchTimeslot(appointment.doctor_id)
+                        fetchTimeslot(appointment.doctor_id, appointment.patient_id) // Pass both IDs
                     );
                     const timeslotData = await Promise.all(timeslotPromises);
                     const timeslotMap = {};
                     timeslotData.forEach(timeslot => {
-                        timeslotMap[timeslot.doctor_id] = timeslot;
+                        timeslotMap[`${timeslot.doctor_id}-${timeslot.patient_id}`] = timeslot; // Use a unique key
                     });
                     setTimeslots(timeslotMap);
-
-
                 }
                 setLoading(false);
             } catch (err) {
@@ -101,12 +99,11 @@ const DoctorAppointmentsPage = () => {
             console.error("Failed to mark appointment as done:", err);
         }
     };
+
     const closePrescriptionForm = () => {
         setIsPrescriptionFormOpen(false);
         setSelectedAppointment(null);
     };
-
-
 
     return (
         <div className="doctor-page-container">
@@ -147,14 +144,14 @@ const DoctorAppointmentsPage = () => {
                                         </td>
                                         <td>{new Date(appointment.appointment_date).toLocaleDateString()}</td>
                                         <td>
-                                            {timeslots[appointment.doctor_id]?.start_time
-                                                ? formatTime(timeslots[appointment.doctor_id].start_time)
+                                            {timeslots[`${appointment.doctor_id}-${appointment.patient_id}`]?.start_time
+                                                ? formatTime(timeslots[`${appointment.doctor_id}-${appointment.patient_id}`].start_time)
                                                 : "N/A"
                                             }
                                         </td>
                                         <td>
-                                            {timeslots[appointment.doctor_id]?.end_time
-                                                ? formatTime(timeslots[appointment.doctor_id].end_time)
+                                            {timeslots[`${appointment.doctor_id}-${appointment.patient_id}`]?.end_time
+                                                ? formatTime(timeslots[`${appointment.doctor_id}-${appointment.patient_id}`].end_time)
                                                 : "N/A"
                                             }
                                         </td>
