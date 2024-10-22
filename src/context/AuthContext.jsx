@@ -26,7 +26,7 @@ export const AuthProvider = ({ children }) => {
 
     const login = async (username, password, role) => {
         try {
-            const response = await axios.post('http://localhost:8000/login', {
+            const response = await axios.post('https://aibot-healthcare.onrender.com/login', {
                 username,
                 password,
                 role,
