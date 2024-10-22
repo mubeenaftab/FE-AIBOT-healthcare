@@ -1,6 +1,6 @@
 import axios from 'axios';
 const api = axios.create({
-  baseURL: 'https://aibot-healthcare.onrender.com/',
+  baseURL: 'http://localhost:8000',
 
 });
 
@@ -170,8 +170,8 @@ export const fetchPatient = async (patientId) => {
   return response.data;
 };
 
-export const fetchTimeslot = async (doctor_id) => {
-  const response = await api.get(`/timeslots/${doctor_id}`);
+export const fetchTimeslot = async (doctor_id, patient_id) => {
+  const response = await api.get(`/timeslots/${doctor_id}/${patient_id}`);
   return response.data;
 };
 
