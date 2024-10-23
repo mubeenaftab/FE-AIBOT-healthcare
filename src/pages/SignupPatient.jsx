@@ -12,6 +12,11 @@ const RegisterPatientPage = () => {
   const [lastName, setLastName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [dob, setDob] = useState('');
+  const [email, setEmail] = useState('');
+  const [city, setCity] = useState('');
+  const [gender, setGender] = useState('');
+  const [bloodGroup, setBloodGroup] = useState('');
+  const [emergencyContact, setEmergencyContact] = useState('');
   const navigate = useNavigate();
 
   const showFirstError = (errors) => {
@@ -32,8 +37,8 @@ const RegisterPatientPage = () => {
         background: '#1b1b1b',
         color: '#d8fffb',
         didOpen: (toast) => {
-          toast.addEventListener('mouseenter', Swal.stopTimer)
-          toast.addEventListener('mouseleave', Swal.resumeTimer)
+          toast.addEventListener('mouseenter', Swal.stopTimer);
+          toast.addEventListener('mouseleave', Swal.resumeTimer);
         },
         didClose: () => {
           // Focus on the input field that has the error
@@ -56,6 +61,11 @@ const RegisterPatientPage = () => {
       last_name: lastName,
       phone_number: phoneNumber,
       dob,
+      email,
+      city,
+      gender,
+      blood_group: bloodGroup,
+      emergency_contact: emergencyContact,
     };
 
     try {
@@ -72,8 +82,8 @@ const RegisterPatientPage = () => {
         background: '#1b1b1b',
         color: '#d8fffb',
         didOpen: (toast) => {
-          toast.addEventListener('mouseenter', Swal.stopTimer)
-          toast.addEventListener('mouseleave', Swal.resumeTimer)
+          toast.addEventListener('mouseenter', Swal.stopTimer);
+          toast.addEventListener('mouseleave', Swal.resumeTimer);
         }
       });
       setTimeout(() => {
@@ -96,14 +106,13 @@ const RegisterPatientPage = () => {
           background: '#1b1b1b',
           color: '#d8fffb',
           didOpen: (toast) => {
-            toast.addEventListener('mouseenter', Swal.stopTimer)
-            toast.addEventListener('mouseleave', Swal.resumeTimer)
+            toast.addEventListener('mouseenter', Swal.stopTimer);
+            toast.addEventListener('mouseleave', Swal.resumeTimer);
           }
         });
       }
     }
   };
-
 
   return (
     <div className="container-fluid d-flex flex-column justify-content-center align-items-center text-light">
@@ -167,6 +176,74 @@ const RegisterPatientPage = () => {
             id="dob"
             value={dob}
             onChange={(e) => setDob(e.target.value)}
+          />
+        </div>
+
+        <div className="mb-1 mt-1">
+          <label htmlFor="email" className="form-label label" style={{ fontSize: '0.875rem' }}>Email</label>
+          <input
+            type="email"
+            className="form-control bg-dark text-light border-0"
+            id="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </div>
+
+        <div className="mb-1 mt-1">
+          <label htmlFor="city" className="form-label label" style={{ fontSize: '0.875rem' }}>City</label>
+          <input
+            type="text"
+            className="form-control bg-dark text-light border-0"
+            id="city"
+            value={city}
+            onChange={(e) => setCity(e.target.value)}
+          />
+        </div>
+
+        <div className="mb-1 mt-1">
+          <label htmlFor="gender" className="form-label label" style={{ fontSize: '0.875rem' }}>Gender</label>
+          <select
+            className="form-control bg-dark text-light border-0"
+            id="gender"
+            value={gender}
+            onChange={(e) => setGender(e.target.value)}
+          >
+            <option value="">Select gender</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+
+        <div className="mb-1 mt-1">
+          <label htmlFor="bloodGroup" className="form-label label" style={{ fontSize: '0.875rem' }}>Blood Group</label>
+          <select
+            className="form-control bg-dark text-light border-0"
+            id="bloodGroup"
+            value={bloodGroup}
+            onChange={(e) => setBloodGroup(e.target.value)}
+          >
+            <option value="">Select blood group</option>
+            <option value="A+">A+</option>
+            <option value="A-">A-</option>
+            <option value="B+">B+</option>
+            <option value="B-">B-</option>
+            <option value="O+">O+</option>
+            <option value="O-">O-</option>
+            <option value="AB+">AB+</option>
+            <option value="AB-">AB-</option>
+          </select>
+        </div>
+
+        <div className="mb-1 mt-1">
+          <label htmlFor="emergencyContact" className="form-label label" style={{ fontSize: '0.875rem' }}>Emergency Contact</label>
+          <input
+            type="text"
+            className="form-control bg-dark text-light border-0"
+            id="emergencyContact"
+            value={emergencyContact}
+            onChange={(e) => setEmergencyContact(e.target.value)}
           />
         </div>
 
