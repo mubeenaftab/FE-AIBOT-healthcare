@@ -179,7 +179,7 @@
     text-align: center;
     text-decoration: none;
     display: inline-block;
-    margin: 4px 2px;
+    margin: 4px 1px;
     cursor: pointer;
     border-radius: 5px;
 }
@@ -195,7 +195,7 @@
     color: #666666;
     /* Dark gray */
     border: none;
-    padding: 4px 10px;
+    padding: 4px 33px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
@@ -211,6 +211,5 @@
 
 .done-button:hover {
     background-color: #b3b3b3;
-    /* Darker gray */
-    /* No change to color or other properties since it should be non-clickable */
+
 }

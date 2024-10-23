@@ -129,3 +129,38 @@
     background-color: var(--color-nav-link-active);
     color: var(--color-nav-link-active-text);
 }
+
+.profile-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 3px;
+}
+
+.edit-profile-btn,
+.logout-btn {
+    padding: 8px 5px;
+    background-color: var(--color-nav-link-hover);
+    border: none;
+    border-radius: var(--border-radius);
+    color: var(--color-nav-link);
+    font-size: 12px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.edit-profile-btn:hover,
+.logout-btn:hover {
+    background-color: var(--color-nav-link-active);
+    color: var(--color-nav-link-active-text);
+}
+
+.logout-btn {
+    background-color: #e74c3c;
+
+}
+
+.logout-btn:hover {
+    background-color: #c0392b;
+
+}
