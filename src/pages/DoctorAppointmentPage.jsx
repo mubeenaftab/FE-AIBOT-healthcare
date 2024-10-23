@@ -3,7 +3,8 @@ import DoctorSidebar from '../components/DoctorSidebar';
 import './css/DoctorAppointmentPage.css';
 import { Helmet } from "react-helmet-async";
 import { getDoctorAppointments, fetchPatient, fetchTimeslot, markAppointmentAsInactive } from '../api';
-import PrescriptionForm from '../components/PrescriptionForm'; // Adjust API imports
+import PrescriptionForm from '../components/PrescriptionForm';
+import PatientInfo from '../components/PatientInfo'; // Import PatientInfo
 
 function formatTime(timeString) {
     if (!timeString) return "N/A";
@@ -27,6 +28,7 @@ const DoctorAppointmentsPage = () => {
     const [timeslots, setTimeslots] = useState({});
     const [isPrescriptionFormOpen, setIsPrescriptionFormOpen] = useState(false);
     const [selectedAppointment, setSelectedAppointment] = useState(null);
+    const [isPatientInfoOpen, setIsPatientInfoOpen] = useState(false); // New state for PatientInfo
 
     useEffect(() => {
         const fetchAppointments = async () => {
@@ -54,12 +56,12 @@ const DoctorAppointmentsPage = () => {
                     setPatients(patientMap);
 
                     const timeslotPromises = data.items.map(appointment =>
-                        fetchTimeslot(appointment.doctor_id, appointment.patient_id) // Pass both IDs
+                        fetchTimeslot(appointment.doctor_id, appointment.patient_id)
                     );
                     const timeslotData = await Promise.all(timeslotPromises);
                     const timeslotMap = {};
                     timeslotData.forEach(timeslot => {
-                        timeslotMap[`${timeslot.doctor_id}-${timeslot.patient_id}`] = timeslot; // Use a unique key
+                        timeslotMap[`${timeslot.doctor_id}-${timeslot.patient_id}`] = timeslot;
                     });
                     setTimeslots(timeslotMap);
                 }
@@ -85,23 +87,33 @@ const DoctorAppointmentsPage = () => {
 
     const handleMarkAsDone = async (appointment) => {
         try {
-            await markAppointmentAsInactive(appointment.appointment_id); // Call API to mark as inactive
+            await markAppointmentAsInactive(appointment.appointment_id);
             setAppointments((prevAppointments) =>
                 prevAppointments.map(a =>
                     a.appointment_id === appointment.appointment_id
-                        ? { ...a, is_active: false } // Update the appointment state
+                        ? { ...a, is_active: false }
                         : a
                 )
             );
-            setSelectedAppointment(appointment); // Set the selected appointment for the form
-            setIsPrescriptionFormOpen(true); // Open the prescription form
+            setSelectedAppointment(appointment);
+            setIsPrescriptionFormOpen(true);
         } catch (err) {
             console.error("Failed to mark appointment as done:", err);
         }
     };
 
+    const handleViewPatient = (patientId) => {
+        setSelectedAppointment(appointments.find(a => a.patient_id === patientId));
+        setIsPatientInfoOpen(true);
+    };
+
     const closePrescriptionForm = () => {
         setIsPrescriptionFormOpen(false);
+        setSelectedAppointment(null);
+    };
+
+    const closePatientInfo = () => {
+        setIsPatientInfoOpen(false);
         setSelectedAppointment(null);
     };
 
@@ -131,6 +143,7 @@ const DoctorAppointmentsPage = () => {
                                     <th>End time</th>
                                     <th>Status</th>
                                     <th>Action</th>
+                                    <th>Patient Info</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -158,17 +171,31 @@ const DoctorAppointmentsPage = () => {
                                         <td>{appointment.is_active ? 'Active' : 'Inactive'}</td>
                                         <td>
                                             {appointment.is_active ? (
-                                                <button
-                                                    onClick={() => handleMarkAsDone(appointment)} // Pass appointment to the handler
-                                                    className="mark-done-button"
-                                                >
-                                                    Mark as Done
-                                                </button>
+                                                <>
+                                                    <button
+                                                        onClick={() => handleMarkAsDone(appointment)}
+                                                        className="mark-done-button"
+                                                    >
+                                                        Mark as Done
+                                                    </button>
+
+                                                </>
                                             ) : (
                                                 <button disabled className="done-button">
                                                     Done
                                                 </button>
                                             )}
+                                        </td>
+                                        <td>
+                                            <button
+                                                onClick={() => handleViewPatient(appointment.patient_id)} // New view patient button
+                                                className="mark-done-button"
+                                            >
+                                                View Patient
+                                            </button>
+                                        </td>
+                                        <td>
+
                                         </td>
                                     </tr>
                                 ))}
@@ -205,6 +232,13 @@ const DoctorAppointmentsPage = () => {
                     <PrescriptionForm
                         appointment={selectedAppointment}
                         onClose={closePrescriptionForm}
+                    />
+                )}
+
+                {isPatientInfoOpen && selectedAppointment && (
+                    <PatientInfo
+                        patient={patients[selectedAppointment.patient_id]} // Pass the patient data
+                        onClose={closePatientInfo} // Handle closing the component
                     />
                 )}
             </div>
