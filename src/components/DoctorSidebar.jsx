@@ -124,7 +124,7 @@ function Sidebar() {
         </ul>
       </nav>
       <div className="brand">
-        <h3>CODEAZA</h3>
+        <h3>CHEMSA.AI</h3>
       </div>
     </aside>
   );
