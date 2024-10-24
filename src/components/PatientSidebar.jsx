@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { NavLink, useNavigate } from 'react-router-dom'; // Added useNavigate
+import { NavLink, useNavigate } from 'react-router-dom';
 import PatientDp from '../assets/patient.png';
 import { TbMessageChatbot } from "react-icons/tb";
 import { jwtDecode } from 'jwt-decode';
@@ -59,9 +59,6 @@ function Sidebar() {
           </li>
         </ul>
       </nav>
-      <div className="brand">
-        <h3>CHEMSA.AI</h3>
-      </div>
     </aside>
   );
 }

@@ -1,6 +1,8 @@
 :root {
     --background-color: #125f4f;
+    --background-scroll-color: #1a816c;
     --content-background: #0a4237;
+    --content-scroll-background: #0b4a3d;
     --header-title-color: #fff;
     --button-background: #fbc02d;
     --button-text-color: #000;
@@ -34,11 +36,10 @@
     font-weight: bold;
 }
 
-
 .update-form {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Two columns by default */
+    gap: 15px;
 }
 
 .form-group {
@@ -51,8 +52,8 @@ label {
     color: var(--header-title-color);
 }
 
-input {
-    padding: 6px;
+input, select {
+    padding: 8px;
     border-radius: 4px;
     border: 1px solid #ccc;
     font-size: 16px;
@@ -61,11 +62,13 @@ input {
 .update-button {
     background-color: var(--button-background);
     color: var(--button-text-color);
-    padding: 6px;
+    padding: 10px 20px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
     font-size: 16px;
+    width: 100%;
+    grid-column: span 2;
 }
 
 .update-button:hover {
@@ -74,8 +77,149 @@ input {
 
 .success-message {
     color: var(--success-color);
+    grid-column: span 2;
 }
 
 .error-message {
     color: var(--error-color);
+    grid-column: span 2;
+}
+
+.password-group {
+    grid-column: span 2;
+}
+
+.update-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.delete-button {
+    background-color: var(--error-color);
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease; 
+}
+
+.delete-button:hover {
+    background-color: darkred;
+}
+
+/* Scrollbar track */
+.update-content::-webkit-scrollbar {
+    width: 9px;
+}
+
+.update-content::-webkit-scrollbar-thumb {
+    background-color: var(--background-scroll-color);
+    border-radius: 4px;
+    border: 2px solid var(--content-background);
+}
+
+.update-content::-webkit-scrollbar-track {
+    background-color: var(--content-scroll-background);
+    border-radius: 3px !important;
+
+}
+
+.update-content::-webkit-scrollbar-thumb:hover {
+    background-color: #1c987f;
+}
+
+.update-content::-webkit-scrollbar-corner {
+    background-color: var(--content-background);
+}
+
+.sidebar-wrapper, .chat-content {
+    transition: all 0.3s ease-in-out;
+}
+
+body.sidebar-open {
+    overflow: hidden;
+}
+
+.hamburger-menu {
+    display: none;
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    z-index: 1000;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: #fff;
+    padding: 0.5rem;
+}
+
+.sidebar-wrapper {
+    position: relative;
+    transition: transform 0.3s ease-in-out;
+}
+
+/* Mobile Styles */
+@media screen and (max-width: 768px) {
+    .hamburger-menu {
+        display: block;
+    }
+
+    .sidebar-wrapper {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        z-index: 999;
+        background-color: var(--background-color);
+        transform: translateX(-100%);
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .sidebar-wrapper.sidebar-open {
+        transform: translateX(0);
+    }
+
+    .update-content {
+        margin-top: 70px;
+        margin-bottom: 15px;
+        padding: 17px 17px;
+    }
+
+    .update-title {
+        font-size: 24px; /* Smaller title for mobile */
+    }
+
+    .update-header {
+        margin-bottom: 10px;
+    }
+
+    .delete-button {
+        padding: 4px 8px;
+        font-size: 14px;
+        border-radius: 3px;
+    }
+
+    .update-form {
+        display: block;
+    }
+
+    .update-button {
+        margin-top: 13px;
+        padding: 8px 16px; /* Smaller button for mobile */
+        font-size: 14px;
+    }
+
+    input, select {
+        padding: 6px;
+        border-radius: 5px;
+        font-size: 13px;
+    }
+
+    label {
+        font-size: 15px;
+    }
 }
