@@ -2,6 +2,7 @@ import axios from 'axios';
 const api = axios.create({
   baseURL: 'https://aibot-healthcare.onrender.com',
 
+
 });
 
 api.interceptors.request.use(
@@ -190,6 +191,29 @@ export const markAppointmentAsInactive = async (appointment_id) => {
   return response.data;
 };
 
+export const patientDelete = async (userId, token) => {
+  try {
+      const response = await api.delete(`/patients/${userId}`, {
+          headers: {
+              Authorization: `Bearer ${token}`,
+          },
+      });
+      return response.data;
+  } catch (error) {
+      throw error;
+  }
+};
 
-
+export const doctorDelete = async (userId, token) => {
+  try {
+      const response = await api.delete(`/doctors/${userId}`, {
+          headers: {
+              Authorization: `Bearer ${token}`,
+          },
+      });
+      return response.data;
+  } catch (error) {
+      throw error;
+  }
+};
 

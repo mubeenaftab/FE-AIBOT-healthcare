@@ -106,9 +106,6 @@ function Sidebar() {
           </li>
         </ul>
       </nav>
-      <div className="brand">
-        <h3>CHEMSA.AI</h3>
-      </div>
     </aside>
   );
 }

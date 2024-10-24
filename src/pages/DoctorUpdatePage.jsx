@@ -1,26 +1,32 @@
+import { Helmet } from "react-helmet-async";
 import React, { useEffect, useState } from 'react';
+import { doctorDelete, fetchDoctor, updateDoctor } from '../api';
+import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
+import Swal from 'sweetalert2';
 import DoctorSidebar from '../components/DoctorSidebar';
 import './css/UpdatePage.css';
-import { Helmet } from "react-helmet-async";
-import { fetchDoctor, updateDoctor } from '../api';
-import { useAuth } from '../context/AuthContext';
+
 
 const DoctorUpdatePage = () => {
     const navigate = useNavigate();
     const { user } = useAuth();
     const [doctorData, setDoctorData] = useState({
-        first_name: '',
-        last_name: '',
-        phone_number: '',
+        password: '',
+        firstName: '',
+        lastName: '',
         specialization: '',
-        password: ''
+        phoneNumber: '',
+        email: '',
+        city: '',
+        gender: '',
+        yearsOfExperience: '',
+        consultationFee: ''
     });
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [success, setSuccess] = useState(false);
-
+    
     useEffect(() => {
         const loadDoctorData = async () => {
             try {
@@ -30,22 +36,38 @@ const DoctorUpdatePage = () => {
                 const { user_id } = jwtDecode(user.token);
                 const data = await fetchDoctor(user_id);
                 setDoctorData({
-                    first_name: data.first_name,
-                    last_name: data.last_name,
-                    phone_number: data.phone_number,
+                    firstName: data.first_name,
+                    lastName: data.last_name,
                     specialization: data.specialization,
+                    phoneNumber: data.phone_number,
+                    email: data.email,
+                    city: data.city,
+                    gender: data.gender,
+                    yearsOfExperience: data.years_of_experience,
+                    consultationFee: data.consultation_fee,
                     password: ''
                 });
                 setLoading(false);
             } catch (error) {
-                setError('Failed to load doctor data: ' + error.message);
+                Swal.fire({
+                    title: 'Error',
+                    text: `Failed to load doctor data: ${error.message}`,
+                    icon: 'error',
+                    toast: true,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    background: '#1b1b1b',
+                    color: '#d8fffb'
+                });
                 setLoading(false);
             }
         };
-
+    
         loadDoctorData();
     }, [user]);
-
+    
     const handleChange = (e) => {
         const { name, value } = e.target;
         setDoctorData(prevData => ({
@@ -53,25 +75,157 @@ const DoctorUpdatePage = () => {
             [name]: value
         }));
     };
-
+    
+    const showFirstError = (errors) => {
+        console.log("msla", doctorData)
+        if (errors && errors.length > 0) {
+            const firstError = errors[0];
+            const field = firstError.loc[firstError.loc.length - 1];
+            const message = firstError.msg;
+    
+            Swal.fire({
+                title: `${field.charAt(0).toUpperCase() + field.slice(1)}`,
+                text: message,
+                icon: 'error',
+                toast: true,
+                timer: 3000,
+                timerProgressBar: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                background: '#1b1b1b',
+                color: '#d8fffb',
+                didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer);
+                    toast.addEventListener('mouseleave', Swal.resumeTimer);
+                }
+            });
+        }
+    };
+    
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setError(null);
-        setSuccess(false);
         try {
+            const updatedDoctorData = {
+                first_name: doctorData.firstName,
+                last_name: doctorData.lastName,
+                specialization: doctorData.specialization,
+                phone_number: doctorData.phoneNumber,
+                email: doctorData.email,
+                city: doctorData.city,
+                gender: doctorData.gender,
+                years_of_experience: doctorData.yearsOfExperience,
+                consultation_fee: doctorData.consultationFee,
+                password: doctorData.password || ""
+            };
             if (!user || !user.token) {
                 throw new Error('User token not found');
             }
-            const { user_id } = jwtDecode(user.token); // Assuming user_id is the doctor's ID
-            await updateDoctor(user_id, doctorData); // Ensure this API is correctly set up
-            setSuccess(true);
+            const { user_id } = jwtDecode(user.token);
+            await updateDoctor(user_id, updatedDoctorData);
+    
+            Swal.fire({
+                title: 'Update Successful',
+                text: 'Doctor details have been updated successfully.',
+                icon: 'success',
+                toast: true,
+                timer: 3000,
+                timerProgressBar: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                background: '#1b1b1b',
+                color: '#d8fffb'
+            });
+    
         } catch (error) {
-            setError('Failed to update doctor: ' + error.message);
+            if (error.response && error.response.status === 422) {
+                const validationErrors = error.response.data.detail;
+                showFirstError(validationErrors);
+            } else {
+                Swal.fire({
+                    title: 'Update Failed',
+                    text: `Failed to update doctor: ${error.message}`,
+                    icon: 'error',
+                    toast: true,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    background: '#1b1b1b',
+                    color: '#d8fffb'
+                });
+            }
         }
     };
 
-    if (loading) return <div>Loading...</div>;
+    const handleDelete = async () => {
+        if (!user || !user.token) {
+            Swal.fire({
+                title: 'Error',
+                text: 'User token not found',
+                icon: 'error',
+                toast: true,
+                timer: 3000,
+                timerProgressBar: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                background: '#1b1b1b',
+                color: '#d8fffb'
+            });
+            return;
+        }
+    
+        const { user_id } = jwtDecode(user.token);
+    
+        const confirmation = await Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!',
+            background: '#1b1b1b',
+            color: '#d8fffb'
+        });
+    
+        if (confirmation.isConfirmed) {
+            try {
+                await doctorDelete(user_id, user.token);
+                Swal.fire({
+                    title: 'Deleted!',
+                    text: 'Your profile has been deleted.',
+                    icon: 'success',
+                    toast: true,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    background: '#1b1b1b',
+                    color: '#d8fffb'
+                });
 
+                navigate('/login');
+
+            } catch (error) {
+                Swal.fire({
+                    title: 'Error!',
+                    text: `Failed to delete profile: ${error.message}`,
+                    icon: 'error',
+                    toast: true,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    background: '#1b1b1b',
+                    color: '#d8fffb'
+                });
+            }
+        }
+    };
+    
+    
+    if (loading) return <div>Loading...</div>;
+    
     return (
         <div className="update-container">
             <Helmet>
@@ -79,42 +233,32 @@ const DoctorUpdatePage = () => {
             </Helmet>
             <DoctorSidebar />
             <div className="update-content">
-                <h1 className="update-title">Update Doctor</h1>
-
-                {success && <p className="success-message">Doctor updated successfully!</p>}
+                <div className="update-header">
+                    <h1 className="update-title">Update Doctor</h1>
+                    <button className="delete-button" onClick={handleDelete}>Delete Profile</button>
+                </div>
                 {error && <p className="error-message">{error}</p>}
                 <form onSubmit={handleSubmit} className="update-form">
+
                     <div className="form-group">
-                        <label htmlFor="first_name">First Name</label>
+                        <label htmlFor="firstName">First Name</label>
                         <input
-                            id="first_name"
+                            id="firstName"
                             type="text"
-                            name="first_name"
-                            value={doctorData.first_name}
+                            name="firstName"
+                            value={doctorData.firstName}
                             onChange={handleChange}
                             required
                         />
                     </div>
 
                     <div className="form-group">
-                        <label htmlFor="last_name">Last Name</label>
+                        <label htmlFor="lastName">Last Name</label>
                         <input
-                            id="last_name"
+                            id="lastName"
                             type="text"
-                            name="last_name"
-                            value={doctorData.last_name}
-                            onChange={handleChange}
-                            required
-                        />
-                    </div>
-
-                    <div className="form-group">
-                        <label htmlFor="phone_number">Phone Number</label>
-                        <input
-                            id="phone_number"
-                            type="tel"
-                            name="phone_number"
-                            value={doctorData.phone_number}
+                            name="lastName"
+                            value={doctorData.lastName}
                             onChange={handleChange}
                             required
                         />
@@ -127,6 +271,82 @@ const DoctorUpdatePage = () => {
                             type="text"
                             name="specialization"
                             value={doctorData.specialization}
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
+
+                    <div className="form-group">
+                        <label htmlFor="phoneNumber">Phone Number</label>
+                        <input
+                            id="phoneNumber"
+                            type="tel"
+                            name="phoneNumber"
+                            value={doctorData.phoneNumber}
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
+
+                    <div className="form-group">
+                        <label htmlFor="email">Email</label>
+                        <input
+                            id="email"
+                            type="email"
+                            name="email"
+                            value={doctorData.email}
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
+
+                    <div className="form-group">
+                        <label htmlFor="city">City</label>
+                        <input
+                            id="city"
+                            type="text"
+                            name="city"
+                            value={doctorData.city}
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
+
+                    <div className="form-group">
+                        <label htmlFor="gender">Gender</label>
+                        <select
+                            id="gender"
+                            name="gender"
+                            value={doctorData.gender}
+                            onChange={handleChange}
+                            required
+                        >
+                            <option value="">Select gender</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="others">Others</option>
+                        </select>
+                    </div>
+
+                    <div className="form-group">
+                        <label htmlFor="yearsOfExperience">Years of Experience</label>
+                        <input
+                            id="yearsOfExperience"
+                            type="number"
+                            name="yearsOfExperience"
+                            value={doctorData.yearsOfExperience}
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
+
+                    <div className="form-group">
+                        <label htmlFor="consultationFee">Consultation Fee</label>
+                        <input
+                            id="consultationFee"
+                            type="number"
+                            name="consultationFee"
+                            value={doctorData.consultationFee}
                             onChange={handleChange}
                             required
                         />
