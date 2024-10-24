@@ -91,7 +91,7 @@ export const getDoctors = async (params) => {
     const response = await api.get('/admin/doctors', { params });
     return response.data;
   } catch (error) {
-    console.error('Error fetching expenses:', error);
+    console.error('Error fetching doctors:', error);
     throw error;
   }
 };
@@ -118,7 +118,7 @@ export const getPatients = async (params) => {
     const response = await api.get('/admin/patients', { params });
     return response.data;
   } catch (error) {
-    console.error('Error fetching expenses:', error);
+    console.error('Error fetching patients:', error);
     throw error;
   }
 };
@@ -145,17 +145,27 @@ export const getAppointments = async (params) => {
     const response = await api.get('/admin/appointments', { params });
     return response.data;
   } catch (error) {
-    console.error('Error fetching expenses:', error);
+    console.error('Error fetching appointments:', error);
     throw error;
   }
 };
 
-export const getDoctorAppointments = async (params) => {
+export const getDoctorActiveAppointments = async (params) => {
   try {
-    const response = await api.get('/doctor/appointments', { params });
+    const response = await api.get('/doctor/active/appointments', { params });
     return response.data;
   } catch (error) {
-    console.error('Error fetching expenses:', error);
+    console.error('Error fetching appointments:', error);
+    throw error;
+  }
+};
+
+export const getDoctorInactiveAppointments = async (params) => {
+  try {
+    const response = await api.get('/doctor/inactive/appointments', { params });
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching appointments:', error);
     throw error;
   }
 };

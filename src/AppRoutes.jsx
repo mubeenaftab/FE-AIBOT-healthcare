@@ -13,7 +13,7 @@ import PatientUpdatePage from './pages/PatientUpdatePage';
 import DoctorUpdatePage from './pages/DoctorUpdatePage';
 import TimeSlotPage from './pages/TimeSlotPage';
 import useIdleTimeout from './hooks/useIdleTimeout';
-
+import DoctorAppointmentHostory from './pages/DoctorAppointmentHistory';
 const PrivateRoute = ({ element: Component, ...rest }) => {
     const { user, loading } = useAuth();
 
@@ -46,6 +46,7 @@ const AppRoutes = () => {
             <Route path="/timeslot-form" element={<PrivateRoute element={TimeSlotPage} />} />
             <Route path="/patients/update" element={<PrivateRoute element={PatientUpdatePage} />} />
             <Route path="/doctors/update" element={<PrivateRoute element={DoctorUpdatePage} />} />
+            <Route path="/doctors/appointment/history" element={<PrivateRoute element={DoctorAppointmentHostory} />} />
         </Routes>
     );
 };

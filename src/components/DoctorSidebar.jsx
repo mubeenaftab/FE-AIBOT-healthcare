@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import DoctorDp from '../assets/doctor.png';
-import { FaHome, FaRegCreditCard } from 'react-icons/fa';
+import { FaHome, FaRegCreditCard, FaHistory } from 'react-icons/fa';
+
 import { jwtDecode } from 'jwt-decode';
 import { useAuth } from '../context/AuthContext';
 import './css/Sidebar.css';
@@ -110,6 +111,14 @@ function Sidebar() {
               className={({ isActive }) => isActive ? "active nav-link" : "nav-link"}
             >
               <FaRegCreditCard className="icon" /> Add Timeslots
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to="/doctors/appointment/history"
+              className={({ isActive }) => isActive ? "active nav-link" : "nav-link"}
+            >
+              <FaHistory className="icon" /> View History
             </NavLink>
           </li>
         </ul>

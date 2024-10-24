@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
 import DoctorSidebar from '../components/DoctorSidebar';
-import './css/UpdatePage.css'; // Use the same CSS file
+import './css/UpdatePage.css';
 import { Helmet } from "react-helmet-async";
-import { fetchDoctor, updateDoctor } from '../api'; // Make sure to create this function in your API file
+import { fetchDoctor, updateDoctor } from '../api';
 import { useAuth } from '../context/AuthContext';
 
 const DoctorUpdatePage = () => {
