@@ -9,7 +9,6 @@ import DoctorSidebar from '../components/DoctorSidebar';
 import './css/UpdatePage.css';
 
 
-
 const DoctorUpdatePage = () => {
     const navigate = useNavigate();
     const { user } = useAuth();

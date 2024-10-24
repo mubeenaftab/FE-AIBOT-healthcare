@@ -1,6 +1,7 @@
 import axios from 'axios';
 const api = axios.create({
-  baseURL: 'http://127.0.0.1:8000/',
+  baseURL: 'https://aibot-healthcare.onrender.com',
+
 
 });
 
@@ -91,7 +92,7 @@ export const getDoctors = async (params) => {
     const response = await api.get('/admin/doctors', { params });
     return response.data;
   } catch (error) {
-    console.error('Error fetching expenses:', error);
+    console.error('Error fetching doctors:', error);
     throw error;
   }
 };
@@ -118,7 +119,7 @@ export const getPatients = async (params) => {
     const response = await api.get('/admin/patients', { params });
     return response.data;
   } catch (error) {
-    console.error('Error fetching expenses:', error);
+    console.error('Error fetching patients:', error);
     throw error;
   }
 };
@@ -145,17 +146,27 @@ export const getAppointments = async (params) => {
     const response = await api.get('/admin/appointments', { params });
     return response.data;
   } catch (error) {
-    console.error('Error fetching expenses:', error);
+    console.error('Error fetching appointments:', error);
     throw error;
   }
 };
 
-export const getDoctorAppointments = async (params) => {
+export const getDoctorActiveAppointments = async (params) => {
   try {
-    const response = await api.get('/doctor/appointments', { params });
+    const response = await api.get('/doctor/active/appointments', { params });
     return response.data;
   } catch (error) {
-    console.error('Error fetching expenses:', error);
+    console.error('Error fetching appointments:', error);
+    throw error;
+  }
+};
+
+export const getDoctorInactiveAppointments = async (params) => {
+  try {
+    const response = await api.get('/doctor/inactive/appointments', { params });
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching appointments:', error);
     throw error;
   }
 };
@@ -170,8 +181,8 @@ export const fetchPatient = async (patientId) => {
   return response.data;
 };
 
-export const fetchTimeslot = async (doctor_id) => {
-  const response = await api.get(`/timeslots/${doctor_id}`);
+export const fetchTimeslot = async (doctor_id, patient_id) => {
+  const response = await api.get(`/timeslots/${doctor_id}/${patient_id}`);
   return response.data;
 };
 

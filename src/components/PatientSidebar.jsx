@@ -3,11 +3,14 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import PatientDp from '../assets/patient.png';
 import { TbMessageChatbot } from "react-icons/tb";
 import { jwtDecode } from 'jwt-decode';
+import { useAuth } from '../context/AuthContext';
+import Swal from 'sweetalert2';
 import './css/Sidebar.css';
 
 function Sidebar() {
   const [username, setUsername] = useState('');
   const [showEditButton, setShowEditButton] = useState(false);
+  const { logout } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -33,7 +36,46 @@ function Sidebar() {
   };
 
   const handleEditProfile = () => {
-    navigate('/patients/update'); // Navigate to the patient update page
+    navigate('/patients/update');
+  };
+
+  const handleLogout = () => {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "Do you really want to log out?",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, log out!',
+      cancelButtonText: 'Cancel',
+      background: '#1b1b1b',
+      color: '#d8fffb',
+      showConfirmButton: true,
+      allowOutsideClick: false,
+      customClass: {
+        popup: 'swal2-centered-popup',
+      },
+      position: 'center',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        logout();
+        navigate('/login');
+        Swal.fire({
+          title: 'Logged Out',
+          text: 'You have successfully logged out.',
+          icon: 'success',
+          background: '#1b1b1b',
+          color: '#d8fffb',
+          showConfirmButton: true,
+          position: 'center',
+          allowOutsideClick: false,
+          customClass: {
+            popup: 'swal2-centered-popup',
+          },
+        });
+      }
+    });
   };
 
   return (
@@ -42,9 +84,14 @@ function Sidebar() {
         <img src={PatientDp} alt={username || 'Mobeen Chandler'} />
         <h2>{username || 'Admin'}</h2>
         {showEditButton && (
-          <button className="edit-profile-btn" onClick={handleEditProfile}>
-            Edit Profile
-          </button>
+          <div className="profile-buttons">
+            <button className="edit-profile-btn" onClick={handleEditProfile}>
+              Edit Profile
+            </button>
+            <button className="logout-btn" onClick={handleLogout}>
+              Logout
+            </button>
+          </div>
         )}
       </div>
       <nav className="sidebar-nav">

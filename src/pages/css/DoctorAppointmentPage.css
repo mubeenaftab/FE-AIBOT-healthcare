@@ -179,7 +179,7 @@
     text-align: center;
     text-decoration: none;
     display: inline-block;
-    margin: 4px 2px;
+    margin: 4px 1px;
     cursor: pointer;
     border-radius: 5px;
 }
@@ -195,7 +195,7 @@
     color: #666666;
     /* Dark gray */
     border: none;
-    padding: 4px 10px;
+    padding: 4px 33px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
@@ -211,6 +211,59 @@
 
 .done-button:hover {
     background-color: #b3b3b3;
-    /* Darker gray */
-    /* No change to color or other properties since it should be non-clickable */
+
+}
+
+.search-bar-container {
+    margin: 10px 0;
+}
+
+.search-bar {
+    background-color: var(--extra-button-background);
+    color: var(--button-text-color);
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    font-size: 14px;
+    width: 100%;
+    box-sizing: border-box;
+    color: wheat;
+}
+
+.search-bar::placeholder {
+    color: white;
+}
+
+.export-btn:hover,
+.new-doctor-btn:hover {
+    transform: scale(1.05);
+}
+
+.extra-buttons {
+    display: flex;
+    gap: 5px;
+}
+
+.filter-btn,
+.options-btn,
+.more-btn {
+    background-color: var(--extra-button-background);
+    height: 29px;
+    color: var(--button-text-color);
+    border: none;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.filter-btn:hover,
+.options-btn:hover,
+.more-btn:hover {
+    background-color: var(--extra-button-background);
+    transform: var(--button-hover-transform);
 }

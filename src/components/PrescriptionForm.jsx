@@ -15,7 +15,7 @@ const PrescriptionForm = ({ appointment, onClose }) => {
             const firstError = errors[0];
             const field = firstError.loc[firstError.loc.length - 1];
             const message = firstError.msg;
-            
+
             Swal.fire({
                 title: `${field.charAt(0).toUpperCase() + field.slice(1)}`,
                 text: message,
@@ -162,10 +162,10 @@ const PrescriptionForm = ({ appointment, onClose }) => {
                         <button type="submit">Submit</button>
                         <button
                             type="button"
-                            className="close-button"
+                            className="close-button-top-right"
                             onClick={onClose}
                         >
-                            Return
+                            &times;
                         </button>
                     </div>
                 </form>

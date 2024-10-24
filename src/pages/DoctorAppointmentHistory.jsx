@@ -4,9 +4,9 @@ import './css/DoctorAppointmentPage.css';
 import { Helmet } from "react-helmet-async";
 import { FaFilter } from "react-icons/fa";
 import { CgSortAz } from "react-icons/cg";
-import { getDoctorActiveAppointments, fetchPatient, fetchTimeslot, markAppointmentAsInactive } from '../api';
-import PrescriptionForm from '../components/PrescriptionForm';
+import { getDoctorInactiveAppointments, fetchPatient, fetchTimeslot, markAppointmentAsInactive } from '../api';
 import PatientInfo from '../components/PatientInfo';
+
 function formatTime(timeString) {
     if (!timeString) return "N/A";
 
@@ -18,7 +18,7 @@ function formatTime(timeString) {
     return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 }
 
-const DoctorAppointmentsPage = () => {
+const DoctorAppointmentHostory = () => {
     const [appointments, setAppointments] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [sortOrder, setSortOrder] = useState('desc');
@@ -28,7 +28,6 @@ const DoctorAppointmentsPage = () => {
     const [patients, setPatients] = useState({});
     const [timeslots, setTimeslots] = useState({});
     const [filterVisible, setFilterVisible] = useState(false);
-    const [isPrescriptionFormOpen, setIsPrescriptionFormOpen] = useState(false);
     const [selectedAppointment, setSelectedAppointment] = useState(null);
     const [isPatientInfoOpen, setIsPatientInfoOpen] = useState(false);
 
@@ -41,7 +40,7 @@ const DoctorAppointmentsPage = () => {
                     search: searchTerm,
                     sort_order: sortOrder
                 };
-                const data = await getDoctorActiveAppointments(params);
+                const data = await getDoctorInactiveAppointments(params);
                 if (data.items.length === 0) {
                     setAppointments([]);
                 } else {
@@ -79,16 +78,16 @@ const DoctorAppointmentsPage = () => {
         fetchAppointments();
     }, [searchTerm, sortOrder, currentPage, pageSize]);
 
+    const handlePageChange = (newPage) => {
+        setCurrentPage(newPage);
+    };
+
     const handleSortToggle = () => {
         setSortOrder(prevOrder => prevOrder === 'desc' ? 'asc' : 'desc');
     };
 
     const handleFilterToggle = () => {
         setFilterVisible(prevVisible => !prevVisible);
-    };
-
-    const handlePageChange = (newPage) => {
-        setCurrentPage(newPage);
     };
 
     const handlePageSizeChange = (event) => {
@@ -119,10 +118,6 @@ const DoctorAppointmentsPage = () => {
         setIsPatientInfoOpen(true);
     };
 
-    const closePrescriptionForm = () => {
-        setIsPrescriptionFormOpen(false);
-        setSelectedAppointment(null);
-    };
 
     const closePatientInfo = () => {
         setIsPatientInfoOpen(false);
@@ -137,7 +132,7 @@ const DoctorAppointmentsPage = () => {
             <DoctorSidebar />
             <div className="appointments-content">
                 <div className="appointments-header">
-                    <h1 className="appointments-title">My Appointments</h1>
+                    <h1 className="appointments-title">Appointments History</h1>
                     <div className="header-buttons">
                         <div className="grouped-buttons">
                             <div className="extra-buttons">
@@ -263,12 +258,6 @@ const DoctorAppointmentsPage = () => {
                     </>
                 )}
 
-                {isPrescriptionFormOpen && (
-                    <PrescriptionForm
-                        appointment={selectedAppointment}
-                        onClose={closePrescriptionForm}
-                    />
-                )}
 
                 {isPatientInfoOpen && selectedAppointment && (
                     <PatientInfo
@@ -281,4 +270,4 @@ const DoctorAppointmentsPage = () => {
     );
 };
 
-export default DoctorAppointmentsPage;
+export default DoctorAppointmentHostory;
