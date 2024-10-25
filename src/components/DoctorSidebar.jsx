@@ -54,7 +54,7 @@ function Sidebar() {
       toast: true,
       position: 'top',
       showConfirmButton: false,
-      timer: 5000,
+      timer: 25000,
       timerProgressBar: true,
       didOpen: (toast) => {
         toast.addEventListener('mouseenter', Swal.stopTimer)
