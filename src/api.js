@@ -1,6 +1,6 @@
 import axios from 'axios';
 const api = axios.create({
-  baseURL: 'https://aibot-healthcare.onrender.com',
+  baseURL: 'https://be-aibot-healthcare.onrender.com',
 
 
 });

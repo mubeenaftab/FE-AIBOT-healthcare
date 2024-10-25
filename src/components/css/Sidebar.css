@@ -164,3 +164,7 @@
     background-color: #c0392b;
 
 }
+
+.notification-toast {
+    max-width: 80vw;
+  }

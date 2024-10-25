@@ -31,6 +31,8 @@ const DoctorAppointmentsPage = () => {
     const [isPrescriptionFormOpen, setIsPrescriptionFormOpen] = useState(false);
     const [selectedAppointment, setSelectedAppointment] = useState(null);
     const [isPatientInfoOpen, setIsPatientInfoOpen] = useState(false);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
         const fetchAppointments = async () => {

@@ -15,7 +15,6 @@ function Sidebar() {
   const { logout } = useAuth();
   const navigate = useNavigate();
 
-
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
@@ -36,33 +35,46 @@ function Sidebar() {
   }, []);
 
   const setupWebSocket = (doctorId) => {
-    const ws = new WebSocket(`wss://aibot-healthcare.onrender.com/ws/notifications/${doctorId}`);
+    const ws = new WebSocket(`ws://be-aibot-healthcare.onrender.com/ws/notifications/${doctorId}`);
     
     ws.onmessage = (event) => {
       const notification = JSON.parse(event.data);
       setNotifications((prevNotifications) => [...prevNotifications, notification.message]);
       console.log("notification msg: ", notification.message);
-      displayNotification(notification.message); // Display notification as a toast
+      displayNotification(notification.message);
     };
 
     ws.onclose = () => {
-      setTimeout(() => setupWebSocket(doctorId), 3000); // Reconnect if closed
+      setTimeout(() => setupWebSocket(doctorId), 3000);
     };
   };
 
   const displayNotification = (message) => {
-    Swal.fire({
-      title: 'New Notification',
-      text: message,
+    const Toast = Swal.mixin({
+      toast: true,
+      position: 'top',
+      showConfirmButton: false,
+      timer: 5000,
+      timerProgressBar: true,
+      didOpen: (toast) => {
+        toast.addEventListener('mouseenter', Swal.stopTimer)
+        toast.addEventListener('mouseleave', Swal.resumeTimer)
+      }
+    });
+
+    Toast.fire({
       icon: 'info',
+      title: message,
       background: '#1b1b1b',
       color: '#d8fffb',
-      position: 'top-end',
-      timer: 20000,
-      timerProgressBar: true,
-      showConfirmButton: false,
+      iconColor: '#00bfa5',
+      customClass: {
+        popup: 'notification-toast',
+        title: 'notification-title',
+      }
     });
   };
+
 
   const handleProfileClick = () => {
     setShowEditButton(!showEditButton);
@@ -73,39 +85,39 @@ function Sidebar() {
   };
 
   const handleLogout = () => {
-    Swal.fire({
-      title: 'Are you sure?',
-      text: "Do you really want to log out?",
-      icon: 'warning',
+    const Toast = Swal.mixin({
+      toast: true,
+      position: 'top',
+      showConfirmButton: true,
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, log out!',
+      confirmButtonText: 'Logout',
       cancelButtonText: 'Cancel',
+      confirmButtonColor: '#00bfa5',
+      cancelButtonColor: '#ff5252',
+      timer: false,
+      customClass: {
+        popup: 'notification-toast',
+        title: 'notification-title',
+      }
+    });
+
+    Toast.fire({
+      title: 'Do you want to logout?',
       background: '#1b1b1b',
       color: '#d8fffb',
-      showConfirmButton: true,
-      allowOutsideClick: false,
-      customClass: {
-        popup: 'swal2-centered-popup',
-      },
-      position: 'center',
+      icon: 'question',
+      iconColor: '#00bfa5',
     }).then((result) => {
       if (result.isConfirmed) {
         logout();
         navigate('/login');
-        Swal.fire({
-          title: 'Logged Out',
-          text: 'You have successfully logged out.',
+        
+        // Show logout success notification
+        Toast.fire({
           icon: 'success',
-          background: '#1b1b1b',
-          color: '#d8fffb',
-          showConfirmButton: true,
-          position: 'center',
-          allowOutsideClick: false,
-          customClass: {
-            popup: 'swal2-centered-popup',
-          },
+          title: 'Successfully logged out',
+          showConfirmButton: false,
+          timer: 3000,
         });
       }
     });
