@@ -193,27 +193,27 @@ export const markAppointmentAsInactive = async (appointment_id) => {
 
 export const patientDelete = async (userId, token) => {
   try {
-      const response = await api.delete(`/patients/${userId}`, {
-          headers: {
-              Authorization: `Bearer ${token}`,
-          },
-      });
-      return response.data;
+    const response = await api.delete(`/patients/${userId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
   } catch (error) {
-      throw error;
+    throw error;
   }
 };
 
 export const doctorDelete = async (userId, token) => {
   try {
-      const response = await api.delete(`/doctors/${userId}`, {
-          headers: {
-              Authorization: `Bearer ${token}`,
-          },
-      });
-      return response.data;
+    const response = await api.delete(`/doctors/${userId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
   } catch (error) {
-      throw error;
+    throw error;
   }
 };
 
