@@ -36,7 +36,7 @@ function Sidebar() {
   }, []);
 
   const setupWebSocket = (doctorId) => {
-    const ws = new WebSocket(`ws://aibot-healthcare.onrender.com/ws/notifications/${doctorId}`);
+    const ws = new WebSocket(`wss://aibot-healthcare.onrender.com/ws/notifications/${doctorId}`);
     
     ws.onmessage = (event) => {
       const notification = JSON.parse(event.data);
