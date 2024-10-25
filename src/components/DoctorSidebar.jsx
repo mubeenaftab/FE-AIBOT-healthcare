@@ -11,18 +11,21 @@ import Swal from 'sweetalert2';
 function Sidebar() {
   const [username, setUsername] = useState('');
   const [showEditButton, setShowEditButton] = useState(false);
+  const [notifications, setNotifications] = useState([]);
   const { logout } = useAuth();
   const navigate = useNavigate();
+
 
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
       try {
         const decodedToken = jwtDecode(token);
-        if (decodedToken.sub) {
+        if (decodedToken.sub && decodedToken.user_id) {
           setUsername(decodedToken.sub);
+          setupWebSocket(decodedToken.user_id);
         } else {
-          console.error('Subject (sub) not found in decoded token');
+          console.error('Required fields not found in decoded token');
         }
       } catch (error) {
         console.error('Failed to decode token:', error);
@@ -31,6 +34,35 @@ function Sidebar() {
       console.error('No token found in localStorage');
     }
   }, []);
+
+  const setupWebSocket = (doctorId) => {
+    const ws = new WebSocket(`ws://127.0.0.1:8000/ws/notifications/${doctorId}`);
+    
+    ws.onmessage = (event) => {
+      const notification = JSON.parse(event.data);
+      setNotifications((prevNotifications) => [...prevNotifications, notification.message]);
+      console.log("notification msg: ", notification.message);
+      displayNotification(notification.message); // Display notification as a toast
+    };
+
+    ws.onclose = () => {
+      setTimeout(() => setupWebSocket(doctorId), 3000); // Reconnect if closed
+    };
+  };
+
+  const displayNotification = (message) => {
+    Swal.fire({
+      title: 'New Notification',
+      text: message,
+      icon: 'info',
+      background: '#1b1b1b',
+      color: '#d8fffb',
+      position: 'top-end',
+      timer: 20000,
+      timerProgressBar: true,
+      showConfirmButton: false,
+    });
+  };
 
   const handleProfileClick = () => {
     setShowEditButton(!showEditButton);
