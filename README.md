@@ -1,8 +1,57 @@
-# React + Vite
+# AI Healthcare Bot - Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This repository contains the frontend for the **AI Healthcare Bot** project, developed using Vite for a fast, streamlined development experience. The frontend is designed to provide seamless interactions across Doctor, Patient, and Admin interfaces.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Description
+
+The AI Healthcare Bot's frontend offers a responsive and user-friendly interface for healthcare management. Users can interact with the chatbot, manage appointments, view reminders, and more. Built with Vite, this frontend ensures fast load times and smooth development.
+
+---
+
+## Getting Started
+
+Follow these steps to set up and run the frontend project locally.
+
+### Prerequisites
+
+- Node.js (v14+)
+- npm (Node Package Manager)
+
+### Installation
+
+1. **Clone the repository**:
+   ```bash
+   git clone <repository_url>
+   ```
+2. **Navigate to the project directory**:
+   ```bash
+   cd fe-aibot-healthcare
+   ```
+3. **Install dependencies**:
+   ```bash
+   npm install
+   ```
+
+### Running the Development Server
+
+To start the development server, run:
+
+```bash
+npm run dev
+```
+
+The frontend application should now be accessible at `http://localhost:5173/`.
+
+---
+
+## Technologies Used
+
+- **Vite**: Frontend build tool for fast and optimized development
+- **JavaScript/TypeScript**: Core language for functionality
+- **CSS**: Styling
+
+---
+
+**Project developed by Chemsa Technologies**
